@@ -6,6 +6,11 @@ variables:
     description: This is the output topic for car data
     defaultValue: rocket-data
     required: true
+  - name: rocket
+    inputType: FreeText
+    description: Name of the rocket to ingest
+    defaultValue: SES-9
+    required: true
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
