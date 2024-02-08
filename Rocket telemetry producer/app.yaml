@@ -4,12 +4,7 @@ variables:
   - name: output
     inputType: OutputTopic
     description: This is the output topic for car data
-    defaultValue: realtime-car-data
-    required: true
-  - name: seconds_to_wait
-    inputType: FreeText
-    description: Seconds to wait between each data writing
-    defaultValue: 1
+    defaultValue: rocket-data
     required: true
 dockerfile: dockerfile
 runEntryPoint: main.py

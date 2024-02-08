@@ -1,8 +1,12 @@
+import datetime
 import quixstreams as qx
 import time
 import pandas as pd
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Quix injects credentials automatically to the client.
 # Alternatively, you can always pass an SDK token manually as an argument.
@@ -21,39 +25,65 @@ stream_producer = producer_topic.create_stream()
 # stream = producer_topic.create_stream("my-own-stream-id")
 
 # Give the stream human readable name. This name will appear in data catalogue.
-stream_producer.properties.name = "cardata realtime"
-
-# Save stream in specific folder in data catalogue to help organize your workspace.
-stream_producer.properties.location = "/simulations"
+stream_producer.properties.name = "rocket telemetry"
 
 # Add stream metadata to add context to time series data.
-stream_producer.properties.metadata["circuit"] = "Sakhir Short"
-stream_producer.properties.metadata["player"] = "Swal"
-stream_producer.properties.metadata["game"] = "Codemasters F1 2019"
+stream_producer.properties.metadata["rocket"] = os.environ["rocket"]
 
 # Read the CSV data
-df = pd.read_csv("cardata.csv")
+folder_name = "{}/JSON STREAMING".format(os.environ["rocket"])
+file_name1 = '{} raw.json'.format(os.environ["rocket"])
+file_name2 = 'analysed.json'
 
-# Add TAG__ prefix to column LapNumber to use this column as tag (index).
-df = df.rename(columns={"LapNumber" : "TAG__LapNumber" })
+# Create the full file paths
+file_path1 = os.path.join('.', folder_name, file_name1)
+file_path2 = os.path.join('.', folder_name, file_name2)
+
+# Read the JSON data into Pandas DataFrames
+df1 = pd.read_json(file_path1, lines=True)
+df2 = pd.read_json(file_path2, lines=True)
+
+df2 = df2.drop(columns=["velocity", "altitude"])
+
+# Convert the "time" column to nanoseconds in both DataFrames
+df1['time'] = (df1['time'] * 1e9).astype('int64')
+df2['time'] = (df2['time'] * 1e9).astype('int64')
+
+# Merge the DataFrames based on "time" column
+merged_df = pd.merge_asof(df1, df2, on="time")
+
+# Fill in missing properties using fillna with the method='ffill' (forward fill)
+df = merged_df.fillna(method='ffill')
 
 # Add optional metadata to parameters.
-stream_producer.timeseries.add_definition("Speed").set_range(0, 400).set_unit("KMH")
-stream_producer.timeseries.add_definition("Gear").set_range(0, 9)
-stream_producer.timeseries.add_definition("Steer").set_range(-1, 1)
-stream_producer.timeseries.add_definition("EngineRPM").set_range(0, 14000)
+stream_producer.epoch = datetime.datetime.utcnow()
+
+stream_producer.timeseries.add_definition("velocity", "Velocity").set_unit("KMH")
+stream_producer.timeseries.add_definition("altitude", "Altitude").set_unit("KM")
+stream_producer.timeseries.add_definition("velocity_x", "Velocity_X").set_unit("KMH")
+stream_producer.timeseries.add_definition("velocity_y", "Velocity_Y").set_unit("KMH")
+stream_producer.timeseries.add_definition("acceleration", "Acceleration").set_unit("KMS2")
+stream_producer.timeseries.add_definition("angle", "Angle").set_unit("degrees")
 
 # Every second we read one second worth of data from data frame and send it to the platform.
 print("Writing data")
-seconds_to_wait = float(os.environ["seconds_to_wait"])
+df['time'] = pd.to_datetime(df['time'], unit='ns', utc=True)
+
+start_loop = time.time()
+first_time = df['time'].iloc[0]
 
 for i in range(len(df)):
-    start_loop = time.time()
     df_i = df.iloc[[i]]
+
+    # Calculate the time difference between consecutive rows
+    time_diff = (df['time'].iloc[i] - first_time).total_seconds()
+
     stream_producer.timeseries.publish(df_i)
-    print("Sending " + str(i) + "/" + str(len(df)))
-    end_loop = time.time()
-    time.sleep(max(0.0, seconds_to_wait - (end_loop - start_loop)))
+    #print("Sending " + str(i) + "/" + str(len(df)))
+    print(df_i)
+
+    time_to_wait = max(0.0, time_diff - (time.time() - start_loop))
+    time.sleep(time_to_wait)
 
 print("Closing stream")
 
