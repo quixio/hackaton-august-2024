@@ -59,7 +59,7 @@ deployments:
   - name: Rocket telemetry producer
     application: Rocket telemetry producer
     deploymentType: Service
-    version: latest
+    version: 7c18406485eb38fccc5c5f4305db17e47c71319d
     resources:
       cpu: 200
       memory: 500
@@ -68,9 +68,14 @@ deployments:
     variables:
       - name: output
         inputType: OutputTopic
-        description: Name of the output topic to write into
+        description: This is the output topic for car data
         required: true
         value: rocket-data
+      - name: rocket
+        inputType: FreeText
+        description: Name of the rocket to ingest
+        required: true
+        value: SES-9
 
 # This section describes the Topics of the data pipeline
 topics:
