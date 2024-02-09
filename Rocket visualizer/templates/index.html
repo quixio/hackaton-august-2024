@@ -153,9 +153,9 @@
             document.getElementById('xValue').textContent = `${telemetry.x.toFixed(2)} km`;
             document.getElementById('yValue').textContent = `${telemetry.y.toFixed(2)} km`;
             document.getElementById('angleValue').textContent = `${telemetry.angle.toFixed(2)}°`;
-            document.getElementById('velocityValue').textContent = `${telemetry.velocity.toFixed(2) * 3.6} km/h`;
-            document.getElementById('velocityXValue').textContent = `${telemetry.velocity_x.toFixed(2) * 3.6} km/h`;
-            document.getElementById('velocityYValue').textContent = `${telemetry.velocity_y.toFixed(2) * 3.6} km/h`;
+            document.getElementById('velocityValue').textContent = `${(telemetry.velocity * 3.6).toFixed(2)} km/h`;
+            document.getElementById('velocityXValue').textContent = `${(telemetry.velocity_x * 3.6).toFixed(2)} km/h`;
+            document.getElementById('velocityYValue').textContent = `${(telemetry.velocity_y * 3.6).toFixed(2)} km/h`;
             document.getElementById('accelerationValue').textContent = `${telemetry.acceleration.toFixed(2)} m/s²`;
             document.getElementById('altitudeValue').textContent = `${telemetry.altitude.toFixed(2)} km`;
 
