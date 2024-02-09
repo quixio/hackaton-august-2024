@@ -101,7 +101,7 @@
 
         // Dynamically generate WebSocket connection URL based on the current location
         const currentLocation = window.location;
-        const socket = io.connect(`http://${currentLocation.host}:80`);
+        const socket = io.connect(`${currentLocation.protocol}//${currentLocation.host}`);
 
         const rocketHistory = new Set(); // Use a Set to store unique rocket positions
 
