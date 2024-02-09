@@ -52,7 +52,7 @@ def join_data(row: dict, state: State):
 
 sdf = sdf.apply(join_data, stateful=True, expand=True)
 
-sdf = sdf.update(lambda row: print(str(message_context().offset) +str(list(row.values()))))
+sdf = sdf.update(lambda row: print(row))
 
 sdf = sdf.to_topic(output_topic)
 
