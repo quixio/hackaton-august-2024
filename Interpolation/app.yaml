@@ -11,7 +11,7 @@ variables:
     description: Name of the output topic to write to.
     defaultValue: rocket-data-interpolated
     required: true
-  - name: lowest-resolution-parameter
+  - name: lowest_resolution_parameter
     inputType: FreeText
     description: Parameter with the lowest resolution
     defaultValue: 
