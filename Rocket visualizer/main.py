@@ -38,7 +38,12 @@ def send_telemetry(data: dict):
     telemetry = {
         'x': data["X"],
         'y': data["Y"],
-        'angle': data["angle"] * -1
+        'angle': data["angle"] * -1,
+        'velocity': data["velocity"],
+        'velocity_x': data["velocity_x"],
+        'velocity_y': data["velocity_y"],
+        'acceleration': data["acceleration"],
+        'altitude': data["altitude"]
     }
 
     socketio.emit('telemetry', telemetry)

@@ -29,7 +29,7 @@ deployments:
   - name: Position XY calculation
     application: Position XY calculation
     deploymentType: Service
-    version: 131ca6f9635adec22bf8fe7fc32c3cd1a852a7e5
+    version: latest
     resources:
       cpu: 500
       memory: 500
@@ -39,13 +39,27 @@ deployments:
       - name: input
         inputType: InputTopic
         description: Name of the input topic to listen to.
-        required: false
+        required: true
         value: rocket-data
       - name: output
         inputType: OutputTopic
         description: Name of the output topic to write to.
-        required: false
+        required: true
         value: rocket-data-xy
+  - name: Rocket visualizer
+    application: Rocket visualizer
+    deploymentType: Service
+    version: latest
+    resources:
+      cpu: 500
+      memory: 500
+      replicas: 1
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        defaultValue: rocket-data-xy
+        required: true
 
 # This section describes the Topics of the data pipeline
 topics:

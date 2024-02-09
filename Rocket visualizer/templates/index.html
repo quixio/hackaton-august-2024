@@ -61,6 +61,26 @@
                 <td>Angle:</td>
                 <td id="angleValue"></td>
             </tr>
+            <tr>
+                <td>Velocity:</td>
+                <td id="velocityValue"></td>
+            </tr>
+            <tr>
+                <td>Velocity_X:</td>
+                <td id="velocityXValue"></td>
+            </tr>
+            <tr>
+                <td>Velocity_Y:</td>
+                <td id="velocityYValue"></td>
+            </tr>
+            <tr>
+                <td>Acceleration:</td>
+                <td id="accelerationValue"></td>
+            </tr>
+            <tr>
+                <td>Altitude:</td>
+                <td id="altitudeValue"></td>
+            </tr>
         </table>
     </div>
 
@@ -84,13 +104,13 @@
         const rocketHistory = new Set(); // Use a Set to store unique rocket positions
 
         // Function to draw the SpaceX Falcon 9 rocket and its trajectory
-        function drawFalcon9(xKm, yKm, angleDegrees) {
+        function drawFalcon9(telemetry) {
             // Convert Km to pixels using the current scaling factor
-            const x = centerX + (xKm * kmToPixels);
-            const y = canvas.height - (yKm * kmToPixels);  // Invert the y-axis to match canvas coordinates
+            const x = centerX + (telemetry.x * kmToPixels);
+            const y = canvas.height - (telemetry.y * kmToPixels);  // Invert the y-axis to match canvas coordinates
 
             // Store current position in history if it's unique
-            rocketHistory.add(`${xKm.toFixed(2)},${yKm.toFixed(2)}`);
+            rocketHistory.add(`${telemetry.x.toFixed(2)},${telemetry.y.toFixed(2)}`);
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -109,23 +129,33 @@
             // Translate and rotate the canvas based on rocket position and angle
             ctx.save();
             ctx.translate(x, y);
-            ctx.rotate((angleDegrees - 90) * Math.PI / 180); // Adjust for canvas orientation and convert to radians
+            ctx.rotate((telemetry.angle - 90) * Math.PI / 180); // Adjust for canvas orientation and convert to radians
 
-            // Draw Falcon 9 rocket with improved shape
-            ctx.fillStyle = '#000080';
+            // Draw Falcon 9 rocket with improved shape and flame effect
+            ctx.fillStyle = '#6495ED'; // Light blue color
             ctx.fillRect(-5, -5, 10, 20);
 
             // Draw rocket flame
-            ctx.fillStyle = '#ff6600';
-            ctx.fillRect(-2, 15, 4, 10);
+            ctx.fillStyle = '#ffcc00'; // Yellow color
+            ctx.beginPath();
+            ctx.moveTo(-3, 15);
+            ctx.lineTo(3, 15);
+            ctx.lineTo(0, 25);
+            ctx.closePath();
+            ctx.fill();
 
             // Restore the canvas transformation
             ctx.restore();
 
             // Update legend values
-            document.getElementById('xValue').textContent = `${xKm.toFixed(2)} km`;
-            document.getElementById('yValue').textContent = `${yKm.toFixed(2)} km`;
-            document.getElementById('angleValue').textContent = `${angleDegrees.toFixed(2)}°`;
+            document.getElementById('xValue').textContent = `${telemetry.x.toFixed(2)} km`;
+            document.getElementById('yValue').textContent = `${telemetry.y.toFixed(2)} km`;
+            document.getElementById('angleValue').textContent = `${telemetry.angle.toFixed(2)}°`;
+            document.getElementById('velocityValue').textContent = `${telemetry.velocity.toFixed(2)} km/h`;
+            document.getElementById('velocityXValue').textContent = `${telemetry.velocity_x.toFixed(2)} km/h`;
+            document.getElementById('velocityYValue').textContent = `${telemetry.velocity_y.toFixed(2)} km/h`;
+            document.getElementById('accelerationValue').textContent = `${telemetry.acceleration.toFixed(2)} m/s²`;
+            document.getElementById('altitudeValue').textContent = `${telemetry.altitude.toFixed(2)} km`;
 
             // Check if the rocket is beyond the screen boundaries
             if (x < 0 || x > canvas.width || y < 0 || y > canvas.height) {
@@ -136,7 +166,7 @@
 
         // Listen for telemetry updates from Flask-SocketIO
         socket.on('telemetry', (telemetry) => {
-            drawFalcon9(telemetry.x, telemetry.y, telemetry.angle);
+            drawFalcon9(telemetry);
         });
     </script>
 </body>
