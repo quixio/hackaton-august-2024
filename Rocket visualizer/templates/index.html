@@ -99,7 +99,7 @@
         // Initial scaling factor for Km to pixels
         let kmToPixels = canvas.height / 2;
 
-        const socket = io.connect('http://localhost:5000'); // Adjust the URL if your Flask app runs on a different port
+        const socket = io.connect('http://localhost:80'); // Adjust the URL if your Flask app runs on a different port
 
         const rocketHistory = new Set(); // Use a Set to store unique rocket positions
 
