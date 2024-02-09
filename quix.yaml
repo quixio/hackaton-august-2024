@@ -67,7 +67,7 @@ deployments:
   - name: Interpolation
     application: Interpolation
     deploymentType: Service
-    version: fe83ef0b80cc95bfb6b593845f42ffc21557a0a5
+    version: fbd62d85c5dfff2cad8a6c7e5c8e796183d82d29
     resources:
       cpu: 200
       memory: 500
