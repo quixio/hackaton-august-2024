@@ -57,7 +57,7 @@ deployments:
     publicAccess:
       enabled: true
       urlPrefix: rocketvisualizer
-    desiredStatus: Running
+    desiredStatus: Stopped
     variables:
       - name: input
         inputType: InputTopic
