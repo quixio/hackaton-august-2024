@@ -49,17 +49,18 @@ deployments:
   - name: Rocket visualizer
     application: Rocket visualizer
     deploymentType: Service
-    version: latest
+    version: 76068f34bd70e9e94becaa9446b0d189095b9e1e
     resources:
       cpu: 500
       memory: 500
       replicas: 1
+    desiredStatus: Running
     variables:
       - name: input
         inputType: InputTopic
         description: Name of the input topic to listen to.
-        defaultValue: rocket-data-xy
-        required: true
+        required: false
+        value: rocket-data-xy
 
 # This section describes the Topics of the data pipeline
 topics:
