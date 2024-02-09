@@ -6,62 +6,12 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: CSV data source
-    application: csv data source
-    deploymentType: Service
-    version: latest
-    resources:
-      cpu: 200
-      memory: 500
-      replicas: 1
-    desiredStatus: Running
-    variables:
-      - name: output
-        inputType: OutputTopic
-        description: Name of the output topic to write into
-        required: true
-        value: csv-data
-  - name: Name counter
-    application: name counter
-    deploymentType: Service
-    version: latest
-    resources:
-      cpu: 200
-      memory: 500
-      replicas: 1
-    desiredStatus: Running
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: Name of the input topic to listen to.
-        required: false
-        value: csv-data
-      - name: output
-        inputType: OutputTopic
-        description: Name of the output topic to write to.
-        required: false
-        value: counted-names
-  - name: Console logger
-    application: console logger
-    deploymentType: Service
-    version: latest
-    resources:
-      cpu: 200
-      memory: 500
-      replicas: 1
-    desiredStatus: Running
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: Name of the input topic to listen to.
-        required: false
-        value: counted-names
   - name: Rocket telemetry producer
     application: Rocket telemetry producer
     deploymentType: Service
     version: 7c18406485eb38fccc5c5f4305db17e47c71319d
     resources:
-      cpu: 200
+      cpu: 500
       memory: 500
       replicas: 1
     desiredStatus: Running
@@ -75,7 +25,26 @@ deployments:
         inputType: FreeText
         description: Name of the rocket to ingest
         required: true
-        value: SES-9
+        value: SES-9  - name: Position XY calculation
+    application: Position XY calculation
+    deploymentType: Service
+    version: latest
+    resources:
+      cpu: 500
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to read from
+        required: true
+        value: rocket-data-xy
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write into
+        required: true
+        value: rocket-data
 
 # This section describes the Topics of the data pipeline
 topics:
