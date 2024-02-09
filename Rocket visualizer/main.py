@@ -48,9 +48,6 @@ def send_telemetry(data: dict):
 
     socketio.emit('telemetry', telemetry)
 
-def run_socketio_app():
-    socketio.run(app)
-
 if __name__ == '__main__':
     # Start the SocketIO server in a separate thread
     thread = threading.Thread(target=run_socketio_app)
