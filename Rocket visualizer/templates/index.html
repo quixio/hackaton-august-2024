@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpaceX Rocket Telemetry Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        #spaceXText {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 72px;
+            white-space: nowrap;
+        }
+
+        #legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            white-space: nowrap;
+        }
+
+        #legend table {
+            font-size: 18px;
+        }
+
+        #legend table tr td {
+            padding-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="rocketCanvas"></canvas>
+
+    <div id="spaceXText">Space X</div>
+    <div id="legend">
+        <table>
+            <tr>
+                <td>X:</td>
+                <td id="xValue"></td>
+            </tr>
+            <tr>
+                <td>Y:</td>
+                <td id="yValue"></td>
+            </tr>
+            <tr>
+                <td>Angle:</td>
+                <td id="angleValue"></td>
+            </tr>
+        </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script>
+        const canvas = document.getElementById('rocketCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Set X=0 coordinates to the center of the screen
+        const centerX = canvas.width / 2;
+
+        // Initial scaling factor for Km to pixels
+        let kmToPixels = canvas.height / 2;
+
+        const socket = io.connect('http://localhost:5000'); // Adjust the URL if your Flask app runs on a different port
+
+        const rocketHistory = new Set(); // Use a Set to store unique rocket positions
+
+        // Function to draw the SpaceX Falcon 9 rocket and its trajectory
+        function drawFalcon9(xKm, yKm, angleDegrees) {
+            // Convert Km to pixels using the current scaling factor
+            const x = centerX + (xKm * kmToPixels);
+            const y = canvas.height - (yKm * kmToPixels);  // Invert the y-axis to match canvas coordinates
+
+            // Store current position in history if it's unique
+            rocketHistory.add(`${xKm.toFixed(2)},${yKm.toFixed(2)}`);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw rocket trajectory
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            for (const point of rocketHistory) {
+                const [px, py] = point.split(',').map(parseFloat);
+                ctx.lineTo(centerX + (px * kmToPixels), canvas.height - (py * kmToPixels));
+            }
+
+            ctx.stroke();
+
+            // Translate and rotate the canvas based on rocket position and angle
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate((angleDegrees - 90) * Math.PI / 180); // Adjust for canvas orientation and convert to radians
+
+            // Draw Falcon 9 rocket with improved shape
+            ctx.fillStyle = '#000080';
+            ctx.fillRect(-5, -5, 10, 20);
+
+            // Draw rocket flame
+            ctx.fillStyle = '#ff6600';
+            ctx.fillRect(-2, 15, 4, 10);
+
+            // Restore the canvas transformation
+            ctx.restore();
+
+            // Update legend values
+            document.getElementById('xValue').textContent = `${xKm.toFixed(2)} km`;
+            document.getElementById('yValue').textContent = `${yKm.toFixed(2)} km`;
+            document.getElementById('angleValue').textContent = `${angleDegrees.toFixed(2)}°`;
+
+            // Check if the rocket is beyond the screen boundaries
+            if (x < 0 || x > canvas.width || y < 0 || y > canvas.height) {
+                // Divide the scaling factor by 2
+                kmToPixels /= 2;
+            }
+        }
+
+        // Listen for telemetry updates from Flask-SocketIO
+        socket.on('telemetry', (telemetry) => {
+            drawFalcon9(telemetry.x, telemetry.y, telemetry.angle);
+        });
+    </script>
+</body>
+</html>
