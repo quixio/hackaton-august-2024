@@ -149,6 +149,11 @@
             // Restore the canvas transformation
             ctx.restore();
 
+            // Draw label "SES-9" next to the rocket
+            ctx.fillStyle = '#fff'; // White color
+            ctx.font = '12px Inter'; // Adjust font size and family
+            ctx.fillText('SES-9', x + 15, y);
+
             // Update legend values
             document.getElementById('xValue').textContent = `${telemetry.x.toFixed(2)} km`;
             document.getElementById('yValue').textContent = `${telemetry.y.toFixed(2)} km`;
