@@ -49,7 +49,7 @@ deployments:
   - name: Rocket visualizer
     application: Rocket visualizer
     deploymentType: Service
-    version: a47160d4972aa31652004d8654cb4b74734a72dd
+    version: 8de8b9dfebaea76b18be2c33ed70934b683de865
     resources:
       cpu: 500
       memory: 500
