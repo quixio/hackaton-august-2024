@@ -64,6 +64,31 @@ deployments:
         description: Name of the input topic to listen to.
         required: false
         value: rocket-data-xy
+  - name: Interpolation
+    application: Interpolation
+    deploymentType: Service
+    version: fe83ef0b80cc95bfb6b593845f42ffc21557a0a5
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: true
+        value: rocket-data
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: true
+        value: rocket-data-interpolated
+      - name: lowest_resolution_parameter
+        inputType: FreeText
+        description: Parameter with the lowest resolution
+        required: true
+        value: altitude
 
 # This section describes the Topics of the data pipeline
 topics:
