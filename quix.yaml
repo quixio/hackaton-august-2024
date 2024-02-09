@@ -9,7 +9,7 @@ deployments:
   - name: Rocket telemetry producer
     application: Rocket telemetry producer
     deploymentType: Service
-    version: 7c18406485eb38fccc5c5f4305db17e47c71319d
+    version: latest
     resources:
       cpu: 500
       memory: 500
@@ -25,7 +25,8 @@ deployments:
         inputType: FreeText
         description: Name of the rocket to ingest
         required: true
-        value: SES-9  - name: Position XY calculation
+        value: SES-9  
+  - name: Position XY calculation
     application: Position XY calculation
     deploymentType: Service
     version: latest
@@ -48,21 +49,14 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: counted-names
+  - name: rocket-data
     persisted: false
     configuration:
       partitions: 1
       replicationFactor: 2
       retentionInMinutes: 1440
       retentionInBytes: 52428800
-  - name: csv-data
-    persisted: false
-    configuration:
-      partitions: 2
-      replicationFactor: 2
-      retentionInMinutes: 10080
-      retentionInBytes: 52428800
-  - name: rocket-data
+  - name: rocket-data-xy
     persisted: false
     configuration:
       partitions: 1
