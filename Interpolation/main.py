@@ -3,7 +3,7 @@ from quixstreams import Application, State, message_context
 from quixstreams.models.serializers.quix import QuixDeserializer, QuixTimeseriesSerializer
 import uuid
 
-app = Application.Quix(str(uuid.uuid4()), auto_offset_reset="earliest")
+app = Application.Quix(str(uuid.uuid4()), auto_offset_reset="latest")
 
 input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
