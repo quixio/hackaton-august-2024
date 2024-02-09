@@ -29,7 +29,7 @@ deployments:
   - name: Position XY calculation
     application: Position XY calculation
     deploymentType: Service
-    version: 72dd90337cb4507b581802aa45a28ac53d353433
+    version: dfde602d469fd70306a2461e25f4688b0bda1f59
     resources:
       cpu: 500
       memory: 500
