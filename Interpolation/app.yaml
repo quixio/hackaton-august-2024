@@ -1,0 +1,21 @@
+name: Interpolation
+language: python
+variables:
+  - name: input
+    inputType: InputTopic
+    description: Name of the input topic to listen to.
+    defaultValue: rocket-data
+    required: true
+  - name: output
+    inputType: OutputTopic
+    description: Name of the output topic to write to.
+    defaultValue: rocket-data-interpolated
+    required: true
+  - name: lowest-resolution-parameter
+    inputType: FreeText
+    description: Parameter with the lowest resolution
+    defaultValue: 
+    required: true
+dockerfile: dockerfile
+runEntryPoint: main.py
+defaultFile: main.py
