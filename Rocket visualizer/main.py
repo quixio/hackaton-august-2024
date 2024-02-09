@@ -31,7 +31,7 @@ def simulate_telemetry():
     import random
 
 def run_socketio_app():
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0', port=80)
 
 def send_telemetry(data: dict):
 
