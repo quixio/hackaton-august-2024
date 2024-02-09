@@ -25,11 +25,11 @@ deployments:
         inputType: FreeText
         description: Name of the rocket to ingest
         required: true
-        value: SES-9  
+        value: SES-9
   - name: Position XY calculation
     application: Position XY calculation
     deploymentType: Service
-    version: latest
+    version: 72dd90337cb4507b581802aa45a28ac53d353433
     resources:
       cpu: 500
       memory: 500
@@ -38,14 +38,14 @@ deployments:
     variables:
       - name: input
         inputType: InputTopic
-        description: Name of the input topic to read from
-        required: true
-        value: rocket-data-xy
+        description: Name of the input topic to listen to.
+        required: false
+        value: rocket-data
       - name: output
         inputType: OutputTopic
-        description: Name of the output topic to write into
-        required: true
-        value: rocket-data
+        description: Name of the output topic to write to.
+        required: false
+        value: rocket-data-xy
 
 # This section describes the Topics of the data pipeline
 topics:
