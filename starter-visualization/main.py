@@ -32,7 +32,7 @@ def handle_disconnect():
     print('Client disconnected')
 
 def run_socketio_app():
-    socketio.run(app, host='0.0.0.0', port=5000)
+    socketio.run(app, host='0.0.0.0', port=5000) ## changing this port to 80 can cause issues running the app locally
 
 def send_telemetry(data: dict):
     socketio.emit('telemetry', data)

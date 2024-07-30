@@ -23,6 +23,10 @@ deployments:
     application: starter-visualization
     version: latest
     deploymentType: Service
+    network:
+      serviceName: Visualization
+      ports:
+      - port: 5000
     resources:
       cpu: 200
       memory: 800
