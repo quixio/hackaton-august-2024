@@ -1,11 +1,11 @@
-# Hackathon Quix Visualization Template
+# Hackathon Quix visualization template
 
 This basic template includes:
 
 A real-time data processing pipeline with the following services:
 
-- **Demo Data Source**: A car telemetry data source for demonstration purposes.
-- **Starter Visualization**: A simple template that reads from a Kafka topic and sends data to a web page. This page can be customized via ChatGPT to create various visualizations.
+- **demo-data-source**: A car telemetry data source for demonstration purposes.
+- **starter-visualization**: A simple template that reads from a Kafka topic and sends data to a web page. This page can be customized via ChatGPT to create various visualizations.
 
 ```mermaid
 %%{ init: { 'flowchart': { 'curve': 'monotoneX' } } }%%
@@ -21,15 +21,15 @@ classDef topic stroke:#3E89B3;
 classDef topic color:white;
 ```
 
-## How the Starter Visualization Works
+## How the starter-visualization works
 
 This application receives data from a Kafka topic and sends it to a WebSocket connection without any transformation. The same application serves an HTML webpage located at `./templates/index.html`, which reads from the WebSocket and creates a real-time visualization.
 
-## How to Use It
+## How to use it
 
-1. **Start the Visualization Application**: Ensure your data source is running.
-2. **View Initial Visualization**: The time-series data will be displayed on the screen.
-3. **Customize Visualization**:
+1. **Run the visualization application**: Ensure your data source is running.
+2. **View initial visualization**: The time-series data will be displayed on the screen.
+3. **Customize the visualization**:
     - Copy the content of `./templates/index.html` and paste it into ChatGPT, describing how you want your visualization to be customized.
     - Use the modified code provided by ChatGPT to replace the content in `./templates/index.html`.
     - Refresh the webpage to see the updated visualization.
@@ -37,12 +37,12 @@ This application receives data from a Kafka topic and sends it to a WebSocket co
 
 ## Example
 
-- **Initial Visualization**: This is the default visualization provided by the template.
+- **Initial visualization**: This is the default visualization provided by the template.
 
   ![Initial visualization](./images/image.png)
 
 - **ChatGPT conversation**: [View Conversation](https://chatgpt.com/share/de44d4c7-fcbf-4eb5-8919-f999ab4b1bfb)
 
-- **Improved Visualization**: After a few iterations with ChatGPT, the visualization was enhanced. However, there's potential to achieve even more with additional creativity and imagination.
+- **Improved visualization**: After a few iterations with ChatGPT, the visualization was enhanced. However, there's potential to achieve even more with additional creativity and imagination.
 
   ![Improved visualization](./images/image-1.png)
