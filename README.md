@@ -1,8 +1,6 @@
 # Hackathon Quix visualization template
 
-This basic template includes:
-
-A real-time data processing pipeline with the following services:
+This template includes a real-time data processing pipeline with the following services:
 
 - **demo-data-source**: A car telemetry data source for demonstration purposes.
 - **starter-visualization**: A simple template that reads from a Kafka topic and sends data to a web page. This page can be customized via ChatGPT to create various visualizations.
