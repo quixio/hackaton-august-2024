@@ -5,7 +5,6 @@ from quixstreams import Application
 # Import additional modules as needed
 import os
 import threading
-
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 
@@ -14,6 +13,11 @@ from dotenv import load_dotenv
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins='*', async_mode="threading")
+
+# Enabling auto-reloading of templates
+@app.before_request
+def before_request():
+    app.jinja_env.cache = {}
 
 @app.route('/')
 def index():
@@ -28,19 +32,19 @@ def handle_disconnect():
     print('Client disconnected')
 
 def run_socketio_app():
-    socketio.run(app, host='0.0.0.0', port=80, debug=True)
+    socketio.run(app, host='0.0.0.0', port=5000)
 
 def send_telemetry(data: dict):
     socketio.emit('telemetry', data)
 
 if __name__ == '__main__':
-    # Start the SocketIO server in a separate thread
+    load_dotenv(override=False)
+
+    # Start the Flask and SocketIO server in a separate thread
     thread = threading.Thread(target=run_socketio_app)
     thread.start()
 
-    load_dotenv(override=False)
-
-    # Create an Application.
+    # Create an Application and run it in the main thread.
     quix_app = Application()
 
     input_topic = quix_app.topic(os.environ["input"])
