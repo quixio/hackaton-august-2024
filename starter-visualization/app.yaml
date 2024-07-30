@@ -1,0 +1,10 @@
+name: starter-visualization
+language: python
+variables:
+  - name: input
+    inputType: InputTopic
+    defaultValue: f1-data
+    required: false
+dockerfile: dockerfile
+runEntryPoint: main.py
+defaultFile: main.py

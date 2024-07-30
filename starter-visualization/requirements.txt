@@ -1,0 +1,7 @@
+quixstreams==2.8.1
+python-dotenv
+Flask==2.0.1
+Flask-SocketIO==5.1.0
+eventlet==0.31.0
+Werkzeug==2.0.2
+python-socketio==5.5.1

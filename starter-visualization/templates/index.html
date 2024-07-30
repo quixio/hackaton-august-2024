@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Telemetry Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #legend {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #legend table {
+            font-size: 18px;
+        }
+
+        #legend table tr td {
+            padding-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div id="legend">
+        <table id="telemetryTable">
+            <!-- Dynamic rows will be added here -->
+        </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script>
+        const telemetryTable = document.getElementById('telemetryTable');
+
+        // Dynamically generate WebSocket connection URL based on the current location
+        const currentLocation = window.location;
+        const socket = io.connect(`${currentLocation.protocol}//${currentLocation.host}`);
+
+        // Function to update the telemetry data in the legend
+        function updateTelemetry(telemetry) {
+            telemetryTable.innerHTML = ''; // Clear existing data
+
+            for (const [key, value] of Object.entries(telemetry)) {
+                const row = document.createElement('tr');
+
+                const keyCell = document.createElement('td');
+                keyCell.textContent = `${key}:`;
+                row.appendChild(keyCell);
+
+                const valueCell = document.createElement('td');
+                valueCell.textContent = value;
+                row.appendChild(valueCell);
+
+                telemetryTable.appendChild(row);
+            }
+        }
+
+        // Listen for telemetry updates from the server
+        socket.on('telemetry', (telemetry) => {
+            updateTelemetry(telemetry);
+        });
+    </script>
+</body>
+</html>

@@ -6,92 +6,33 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Rocket telemetry producer
-    application: Rocket telemetry producer
-    deploymentType: Service
-    version: 72dd90337cb4507b581802aa45a28ac53d353433
-    resources:
-      cpu: 500
-      memory: 500
-      replicas: 1
-    desiredStatus: Running
-    variables:
-      - name: output
-        inputType: OutputTopic
-        description: This is the output topic for car data
-        required: true
-        value: rocket-data
-      - name: rocket
-        inputType: FreeText
-        description: Name of the rocket to ingest
-        required: true
-        value: SES-9
-  - name: Position XY calculation
-    application: Position XY calculation
-    deploymentType: Service
+  - name: demo-data-source
+    application: demo-data-source
     version: latest
-    resources:
-      cpu: 500
-      memory: 500
-      replicas: 1
-    desiredStatus: Running
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: Name of the input topic to listen to.
-        required: true
-        value: rocket-data
-      - name: output
-        inputType: OutputTopic
-        description: Name of the output topic to write to.
-        required: true
-        value: rocket-data-xy
-  - name: Rocket visualizer
-    application: Rocket visualizer
     deploymentType: Service
-    version: 8de8b9dfebaea76b18be2c33ed70934b683de865
-    resources:
-      cpu: 500
-      memory: 500
-      replicas: 1
-    publicAccess:
-      enabled: true
-      urlPrefix: rocketvisualizer
-    desiredStatus: Running
-    variables:
-      - name: input
-        inputType: InputTopic
-        description: Name of the input topic to listen to.
-        required: false
-        value: rocket-data-xy
-  - name: Interpolation
-    application: Interpolation
-    deploymentType: Service
-    version: a0bcad8dc7207be72eb48a61937f53c7b4aec387
     resources:
       cpu: 200
-      memory: 500
+      memory: 800
       replicas: 1
-    desiredStatus: Stopped
+    variables:
+      - name: output
+        inputType: OutputTopic
+        required: false
+        value: f1-data
+  - name: starter-visualization
+    application: starter-visualization
+    version: latest
+    deploymentType: Service
+    resources:
+      cpu: 200
+      memory: 800
+      replicas: 1
     variables:
       - name: input
         inputType: InputTopic
-        description: Name of the input topic to listen to.
-        required: true
-        value: rocket-data
-      - name: output
-        inputType: OutputTopic
-        description: Name of the output topic to write to.
-        required: true
-        value: rocket-data-interpolated
-      - name: lowest_resolution_parameter
-        inputType: FreeText
-        description: Parameter with the lowest resolution
-        required: true
-        value: altitude
+        required: false
+        value: f1-data
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: rocket-data
-  - name: rocket-data-xy
-  - name: rocket-data-interpolated
+  - name: f1-data
